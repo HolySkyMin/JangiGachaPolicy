@@ -9,7 +9,7 @@ public class Status : MonoBehaviour
 	public Text[] CardsAmountText;
 	public Text ExtractAmount;
 	public Text ExpectedEarnging;
-	public static int[] cards;
+	public static long[] cards;
 	public static bool isSSSREarned;
 
 	private int extractAmount = 0;

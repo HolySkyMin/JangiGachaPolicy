@@ -31,6 +31,10 @@ public class PolicyData : MonoBehaviour
 
 	public void ApplyPolicy()
 	{
+		if(StageManager.Instance.Money + MoneyDeltaValue < 0 || 
+			StageManager.Instance.Population + PopulationDeltaValue < 0 ||
+			StageManager.Instance.Approval + ApprovalDeltaValue < 0){return;}
+		
 		StageManager.Instance.Money += MoneyDeltaValue;
 		StageManager.Instance.Approval += ApprovalDeltaValue;
 		StageManager.Instance.Population += PopulationDeltaValue;
@@ -40,6 +44,8 @@ public class PolicyData : MonoBehaviour
 			StageManager.Instance.Approval = 100;
 		if(StageManager.Instance.Harvestable >= 100)
 			StageManager.Instance.Harvestable = 100;
+		if(StageManager.Instance.Harvestable <= 0)
+			StageManager.Instance.Harvestable = 0;
 
 		StageManager.Instance.PolicyDimmer.SetActive(true);
 		Gacha.gachaCount = 0;

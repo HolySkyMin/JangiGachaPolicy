@@ -7,14 +7,15 @@ using UnityEngine.UI;
 public class StageManager : MonoBehaviour
 {
 	public static StageManager Instance;
+	public static GameState State = GameState.General;
 
-	public int StageIndex, Money, Population;
+	public int StageIndex = 0, Money, Population;
 	public float Approval, Harvestable;
 	public List<int> StageNumber;
     public List<string> StageName;
-	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText, PolicyGachaText;
-	public GameObject ResultPanel, EarnedPanel, PolicyTemplate, PolicyDimmer;
-	public RectTransform MenuPanel, PolicyListBody;
+	public Text StageNumberText, StageNameText, MoneyText, ApprovalText, PopulationText, HarvestableText, PolicyGachaText;
+	public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyDimmer, NewStagePopup;
+	public RectTransform MenuPanel, GameOverPanel, PolicyListBody;
 	public GameObject[] MenuEffect = new GameObject[4];
 	public RectTransform[] GamePanel = new RectTransform[4];
 
@@ -38,15 +39,21 @@ public class StageManager : MonoBehaviour
 	void Update () 
 	{
 		MoneyText.text = Money.ToString();
+		ApprovalText.text = Approval.ToString();
 		PopulationText.text = Population.ToString();
 		HarvestableText.text = Harvestable.ToString("N0") + "%";
+
+		if(State == GameState.General && Approval <= 0)
+			GameOver();
+		if(State == GameState.General && Money < 3 && Gacha.gachaCount < 20)
+			GameOver();
 	}
 
 	private void ReadStageList()
 	{
 		TextAsset data = Resources.Load("Data/stagelist") as TextAsset;
 		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
-		// Assume that there are only two keys.
+
 		for(int i = 1; i < arr.Length; i++)
 		{
 			string[] row = arr[i].Split(',');
@@ -57,6 +64,8 @@ public class StageManager : MonoBehaviour
 				StageName.Add(row[1]);
 			}
 		}
+
+		StageNameText.text = StageName[StageIndex].ToString();
 	}
 
 	private void ReadPolicyList()
@@ -92,6 +101,7 @@ public class StageManager : MonoBehaviour
 	{
 		GamePanel[index].SetAsLastSibling();
 		MenuPanel.SetAsLastSibling();
+		GameOverPanel.SetAsLastSibling();
 		for(int i = 0; i < MenuEffect.Length; i++)
 		{
 			if(i == index)
@@ -107,7 +117,16 @@ public class StageManager : MonoBehaviour
 		{
 			EarnedPanel.SetActive(true);
 			Status.isSSSREarned = false;
+			StartCoroutine(SSSSRButtonAnim());
 		}
+		else
+			State = GameState.General;
+	}
+
+	IEnumerator SSSSRButtonAnim()
+	{
+		yield return new WaitForSeconds(2);
+		EarnedPanelBtn.SetActive(true);
 	}
 
 	public void UpdatePolicy()
@@ -151,6 +170,13 @@ public class StageManager : MonoBehaviour
 		}
 	}
 
+	public void SkipPolicy()
+	{
+		PolicyDimmer.SetActive(true);
+		Gacha.gachaCount = 0;
+		UpdatePolicyGachaCount();
+	}
+
 	public void UpdatePolicyGachaCount()
 	{
 		PolicyGachaText.text = (20 - Gacha.gachaCount).ToString();
@@ -166,6 +192,14 @@ public class StageManager : MonoBehaviour
 	{
 		StageIndex++;
 		// StageNumberText.text = StageNumber[StageIndex].ToString();
-		// StageNameText.text = StageName[StageIndex].ToString();
+		StageNameText.text = StageName[StageIndex].ToString();
+
+		ChangePanel(0);
+		NewStagePopup.SetActive(true);
+	}
+
+	public void GameOver()
+	{
+		
 	}
 }
