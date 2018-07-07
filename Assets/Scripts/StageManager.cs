@@ -65,8 +65,11 @@ public class StageManager : MonoBehaviour
 
 	public void CheckSSSSREarned()
 	{
-		if(Status.cards[(int)Gacha.Rarity.SSSSR] > 0)
+		if(Status.isSSSREarned)
+		{
 			EarnedPanel.SetActive(true);
+			Status.isSSSREarned = false;
+		}
 	}
 
 	public void UpdateStage()
