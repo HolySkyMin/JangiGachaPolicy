@@ -8,7 +8,8 @@ public class StageManager : MonoBehaviour
 {
 	public static StageManager Instance;
 
-	public int StageIndex, Money, Population, Harvestable;
+	public int StageIndex, Money, Population;
+	public float Approval, Harvestable;
 	public List<int> StageNumber;
     public List<string> StageName;
 	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText;
