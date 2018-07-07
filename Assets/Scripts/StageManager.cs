@@ -12,7 +12,10 @@ public class StageManager : MonoBehaviour
 	public List<int> StageNumber;
     public List<string> StageName;
 	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText;
-	public GameObject EarnedPanel;
+	public GameObject ResultPanel, EarnedPanel;
+	public RectTransform MenuPanel;
+	public GameObject[] MenuEffect = new GameObject[4];
+	public RectTransform[] GamePanel = new RectTransform[4];
 
 	public delegate void SpecialEvent();
 
@@ -23,14 +26,14 @@ public class StageManager : MonoBehaviour
 		else
 			Destroy(this);
 
-		ReadStageList();
+		//ReadStageList();
 	}
 
 	void Update () 
 	{
-		MoneyText.text = Money.ToString();
-		PopulationText.text = Population.ToString();
-		HarvestableText.text = Harvestable.ToString();
+		// MoneyText.text = Money.ToString();
+		// PopulationText.text = Population.ToString();
+		// HarvestableText.text = Harvestable.ToString();
 	}
 
 	private void ReadStageList()
@@ -47,10 +50,29 @@ public class StageManager : MonoBehaviour
 		}
 	}
 
-	public void UpdateStageIndex()
+	public void ChangePanel(int index)
+	{
+		GamePanel[index].SetAsLastSibling();
+		MenuPanel.SetAsLastSibling();
+		for(int i = 0; i < MenuEffect.Length; i++)
+		{
+			if(i == index)
+				MenuEffect[i].SetActive(true);
+			else
+				MenuEffect[i].SetActive(false);
+		}
+	}
+
+	public void CheckSSSSREarned()
+	{
+		if(Status.cards[(int)Gacha.Rarity.SSSSR] > 0)
+			EarnedPanel.SetActive(true);
+	}
+
+	public void UpdateStage()
 	{
 		StageIndex++;
-		StageNumberText.text = StageNumber[StageIndex].ToString();
-		StageNameText.text = StageName[StageIndex].ToString();
+		// StageNumberText.text = StageNumber[StageIndex].ToString();
+		// StageNameText.text = StageName[StageIndex].ToString();
 	}
 }
