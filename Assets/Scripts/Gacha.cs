@@ -60,6 +60,7 @@ public class Gacha : MonoBehaviour
 
 			GachaResult[a] = GachaResult[a] + 1;
 		}
+		StageManager.Instance.Money -= count * 3;
 
 		Debug.Log(GachaResult[0] + ", "
 				+ GachaResult[1] + ", "
@@ -78,6 +79,7 @@ public class Gacha : MonoBehaviour
 		{
 			Status.cards[i] += GachaResult[i];
 		}
+		Status.Instance.DisplayCardCount();
 		if(GachaResult[(int)Rarity.SSSSR] > 0)
 		{
 			Status.isSSSREarned = true;

@@ -33,7 +33,7 @@ public class StageManager : MonoBehaviour
 	{
 		MoneyText.text = Money.ToString();
 		PopulationText.text = Population.ToString();
-		HarvestableText.text = Harvestable.ToString();
+		HarvestableText.text = Harvestable.ToString() + " (" + ((float)Harvestable / Population * 100).ToString("N0") + "%)";
 	}
 
 	private void ReadStageList()
