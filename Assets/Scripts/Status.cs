@@ -7,8 +7,11 @@ public class Status : MonoBehaviour
 {
 	public static Status Instance;
 	public Text[] CardsAmountText;
+	public Text ExtractAmount;
 	public static int[] cards;
 	public static bool isSSSREarned;
+
+	private int extractAmount = 0;
 
 	private void Start()
 	{
@@ -28,5 +31,15 @@ public class Status : MonoBehaviour
 			}
 		}
 		isSSSREarned = false;
+	}
+
+	public void ChangeExtractAmount(int changeAmount)
+	{
+		if(extractAmount + changeAmount >= 0)
+		{
+			extractAmount += changeAmount;
+		}
+
+		ExtractAmount.text = extractAmount.ToString();
 	}
 }
