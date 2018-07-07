@@ -9,7 +9,7 @@ public class Gacha : MonoBehaviour
 		N, R, SR, SSR, SSSR, SSSSR
 	}
 
-	//public int gachaCount;
+	public static int gachaCount = 0;
 
 	void Start ()
 	{	
@@ -84,5 +84,8 @@ public class Gacha : MonoBehaviour
 		{
 			Status.isSSSREarned = true;
 		}
+
+		gachaCount++;
+		StageManager.Instance.UpdatePolicyGachaCount();
 	}
 }

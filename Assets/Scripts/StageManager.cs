@@ -12,9 +12,9 @@ public class StageManager : MonoBehaviour
 	public float Approval, Harvestable;
 	public List<int> StageNumber;
     public List<string> StageName;
-	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText;
-	public GameObject ResultPanel, EarnedPanel;
-	public RectTransform MenuPanel;
+	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText, PolicyGachaText;
+	public GameObject ResultPanel, EarnedPanel, PolicyTemplate, PolicyDimmer;
+	public RectTransform MenuPanel, PolicyListBody;
 	public GameObject[] MenuEffect = new GameObject[4];
 	public RectTransform[] GamePanel = new RectTransform[4];
 
@@ -30,40 +30,61 @@ public class StageManager : MonoBehaviour
 		else
 			Destroy(this);
 
-		//ReadStageList();
+		ReadStageList();
+		ReadPolicyList();
+		UpdatePolicy();
 	}
 
 	void Update () 
 	{
 		MoneyText.text = Money.ToString();
 		PopulationText.text = Population.ToString();
-		HarvestableText.text = Harvestable.ToString() + " (" + ((float)Harvestable / Population * 100).ToString("N0") + "%)";
+		HarvestableText.text = Harvestable.ToString("N0") + "%";
 	}
 
 	private void ReadStageList()
 	{
-		TextAsset data = Resources.Load("stagelist") as TextAsset;
+		TextAsset data = Resources.Load("Data/stagelist") as TextAsset;
 		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
 		// Assume that there are only two keys.
 		for(int i = 1; i < arr.Length; i++)
 		{
 			string[] row = arr[i].Split(',');
-			int idx = int.Parse(row[0]);
-			StageNumber.Add(idx);
-			StageName.Add(row[1]);
+			if(row.Length == 2)
+			{
+				int idx = int.Parse(row[0]);
+				StageNumber.Add(idx);
+				StageName.Add(row[1]);
+			}
 		}
 	}
 
 	private void ReadPolicyList()
 	{
-		TextAsset data = Resources.Load("policyList") as TextAsset;
+		TextAsset data = Resources.Load("Data/policyList") as TextAsset;
 		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
 
 		for(int i = 1; i < arr.Length; i++)
 		{
 			string[] row = arr[i].Split(',');
-			PolicyData policy = new PolicyData();
-			
+			if(row.Length == 7)
+			{
+				PolicyDataCore policy;
+				policy.Name = row[0];
+				policy.Description = row[1];
+				policy.MoneyDeltaValue = int.Parse(row[2]);
+				policy.ApprovalDeltaValue = float.Parse(row[3]);
+				policy.PopulationDeltaValue = int.Parse(row[4]);
+				policy.HarvestableDeltaValue = float.Parse(row[5]);
+
+				int positivity = int.Parse(row[6]);
+				if(positivity == 1)
+					NegativePolicy.Add(policy);
+				else if(positivity == 2)
+					ModeratePolicy.Add(policy);
+				else if(positivity == 3)
+					PositivePolicy.Add(policy);
+			}
 		}
 	}
 
@@ -86,6 +107,58 @@ public class StageManager : MonoBehaviour
 		{
 			EarnedPanel.SetActive(true);
 			Status.isSSSREarned = false;
+		}
+	}
+
+	public void UpdatePolicy()
+	{
+		for(int i = 0; i < PolicyDisplayList.Count; i++)
+			Destroy(PolicyDisplayList[i]);
+		PolicyDisplayList.Clear();
+
+		PolicyDataCore[] policy = new PolicyDataCore[0];
+		int rand = Random.Range(1, 4); // 1, 2, 3 can be picked.
+		if(rand == 1)
+			policy = NegativePolicy.ToArray();
+		else if(rand == 2)
+			policy = ModeratePolicy.ToArray();
+		else if(rand == 3)
+			policy = PositivePolicy.ToArray();
+		
+		bool[] checksum = new bool[policy.Length];
+		for(int i = 0; i < 3; i++)
+		{
+			int index;
+			do
+			{
+				index = Random.Range(0, policy.Length); // 0, 1, ..., policy.Length - 1 can be picked.
+			}
+			while(checksum[index] == true);
+			checksum[index] = true;
+			GameObject newObj = Instantiate(PolicyTemplate);
+			PolicyData newPolicy = newObj.GetComponent<PolicyData>();
+			newPolicy.NameText.text = policy[index].Name;
+			newPolicy.DescriptionText.text = policy[index].Description;
+			newPolicy.MoneyDeltaValue = policy[index].MoneyDeltaValue;
+			newPolicy.ApprovalDeltaValue = policy[index].ApprovalDeltaValue;
+			newPolicy.PopulationDeltaValue = policy[index].PopulationDeltaValue;
+			newPolicy.HarvestableDeltaValue = policy[index].HarvestableDeltaValue;
+			newObj.GetComponent<RectTransform>().SetParent(PolicyListBody);
+			newObj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+			newObj.SetActive(true);
+			newPolicy.DisplayValueInfo();
+			PolicyDisplayList.Add(newObj);
+		}
+	}
+
+	public void UpdatePolicyGachaCount()
+	{
+		PolicyGachaText.text = (20 - Gacha.gachaCount).ToString();
+
+		if(Gacha.gachaCount >= 20)
+		{
+			PolicyDimmer.SetActive(false);
+			UpdatePolicy();
 		}
 	}
 

@@ -42,7 +42,7 @@ public class Status : MonoBehaviour
 
 	public void ChangeExtractAmount(int changeAmount)
 	{
-		if(extractAmount + changeAmount >= 0 && extractAmount + changeAmount <= StageManager.Instance.Harvestable)
+		if(extractAmount + changeAmount >= 0 && extractAmount + changeAmount <= StageManager.Instance.Population * (StageManager.Instance.Harvestable / 100))
 		{
 			extractAmount += changeAmount;
 		}
