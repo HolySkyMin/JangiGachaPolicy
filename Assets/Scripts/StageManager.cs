@@ -31,9 +31,9 @@ public class StageManager : MonoBehaviour
 
 	void Update () 
 	{
-		// MoneyText.text = Money.ToString();
-		// PopulationText.text = Population.ToString();
-		// HarvestableText.text = Harvestable.ToString();
+		MoneyText.text = Money.ToString();
+		PopulationText.text = Population.ToString();
+		HarvestableText.text = Harvestable.ToString();
 	}
 
 	private void ReadStageList()
