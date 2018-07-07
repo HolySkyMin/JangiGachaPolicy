@@ -198,9 +198,9 @@ public class StageManager : MonoBehaviour
 
 	public void UpdatePolicyGachaCount()
 	{
-		PolicyGachaText.text = ((20 + (StageIndex / 5 * 10)) - Gacha.gachaCount).ToString();
+		PolicyGachaText.text = ((20 + (StageIndex / 5 * 15)) - Gacha.gachaCount).ToString();
 
-		if(Gacha.gachaCount >= 20 + (StageIndex / 5 * 10))
+		if(Gacha.gachaCount >= 20 + (StageIndex / 5 * 15))
 		{
 			PolicyDimmer.SetActive(false);
 			UpdatePolicy();
