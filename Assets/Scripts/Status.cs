@@ -50,8 +50,12 @@ public class Status : MonoBehaviour
 
 	public void GetMoney()
 	{
+		float absolutePeople = StageManager.Instance.Population * (StageManager.Instance.Harvestable / 100);
 		StageManager.Instance.Money += extractAmount * 10000;
 		StageManager.Instance.Population -= extractAmount;
+		StageManager.Instance.Approval -= extractAmount / 1000f;
+		absolutePeople -= extractAmount;
+		StageManager.Instance.Harvestable = absolutePeople / StageManager.Instance.Population * 100;
 		extractAmount = 0;
 	}
 }

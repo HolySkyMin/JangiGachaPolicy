@@ -5,5 +5,6 @@ using UnityEngine;
 public enum GameState
 {
 	General,
-	Gacha
+	Gacha,
+	GameOver,
 }

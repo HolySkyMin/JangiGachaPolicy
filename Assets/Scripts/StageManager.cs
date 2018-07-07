@@ -9,7 +9,8 @@ public class StageManager : MonoBehaviour
 	public static StageManager Instance;
 	public static GameState State = GameState.General;
 
-	public int StageIndex = 0, Money, Population;
+	public int StageIndex = 0, Population;
+	public long Money;
 	public float Approval, Harvestable;
 	public List<int> StageNumber;
     public List<string> StageName;
@@ -33,20 +34,37 @@ public class StageManager : MonoBehaviour
 
 		ReadStageList();
 		ReadPolicyList();
-		UpdatePolicy();
+		
+		Initialize();
 	}
 
 	void Update () 
 	{
 		MoneyText.text = Money.ToString();
-		ApprovalText.text = Approval.ToString();
+		ApprovalText.text = Approval.ToString("N2");
 		PopulationText.text = Population.ToString();
-		HarvestableText.text = Harvestable.ToString("N0") + "%";
+		HarvestableText.text = Harvestable.ToString("N2");
 
 		if(State == GameState.General && Approval <= 0)
 			GameOver();
-		if(State == GameState.General && Money < 3 && Gacha.gachaCount < 20)
+		if(State == GameState.General && Money < 3 && Population * (Harvestable / 100) < 10f && Gacha.gachaCount < 20)
 			GameOver();
+	}
+
+	public void Initialize()
+	{
+		Money = 3000000L;
+		Approval = 45;
+		Population = 5000000;
+		Harvestable = 25;
+		StageIndex = -1;
+		Gacha.gachaCount = 20;
+		Status.cards = new long[6] {0L, 0L, 0L, 0L, 0L, 0L};
+		Status.Instance.DisplayCardCount();
+
+		UpdateStage();
+		ResetGameState();
+		UpdatePolicyGachaCount();
 	}
 
 	private void ReadStageList()
@@ -172,6 +190,7 @@ public class StageManager : MonoBehaviour
 
 	public void SkipPolicy()
 	{
+		Approval *= 9f / 10f;
 		PolicyDimmer.SetActive(true);
 		Gacha.gachaCount = 0;
 		UpdatePolicyGachaCount();
@@ -179,9 +198,9 @@ public class StageManager : MonoBehaviour
 
 	public void UpdatePolicyGachaCount()
 	{
-		PolicyGachaText.text = (20 - Gacha.gachaCount).ToString();
+		PolicyGachaText.text = ((20 + StageIndex * 5) - Gacha.gachaCount).ToString();
 
-		if(Gacha.gachaCount >= 20)
+		if(Gacha.gachaCount >= 20 + StageIndex * 5)
 		{
 			PolicyDimmer.SetActive(false);
 			UpdatePolicy();
@@ -198,8 +217,11 @@ public class StageManager : MonoBehaviour
 		NewStagePopup.SetActive(true);
 	}
 
+	public void ResetGameState() { State = GameState.General; }
+
 	public void GameOver()
 	{
-		
+		State = GameState.GameOver;
+		GameOverPanel.gameObject.SetActive(true);
 	}
 }

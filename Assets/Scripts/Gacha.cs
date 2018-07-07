@@ -74,7 +74,7 @@ public class Gacha : MonoBehaviour
 		
 		if(Status.cards == null)
 		{
-			Status.cards = new long[6] {0, 0, 0, 0, 0, 0};
+			Status.cards = new long[6] {0L, 0L, 0L, 0L, 0L, 0L};
 		}
 		for (int i = 0; i < GachaResult.Length; i++)
 		{

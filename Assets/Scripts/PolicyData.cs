@@ -15,7 +15,7 @@ public class PolicyData : MonoBehaviour
 
 	public void DisplayValueInfo()
 	{
-		if(MoneyDeltaValue >= 0)
+		if(MoneyDeltaValue >= 0L)
 			MoneyText.text = "+";
 		MoneyText.text += MoneyDeltaValue.ToString();
 		if(ApprovalDeltaValue >= 0)
@@ -31,14 +31,14 @@ public class PolicyData : MonoBehaviour
 
 	public void ApplyPolicy()
 	{
-		if(StageManager.Instance.Money + MoneyDeltaValue < 0 || 
+		if(StageManager.Instance.Money + MoneyDeltaValue < 0L || 
 			StageManager.Instance.Population + PopulationDeltaValue < 0 ||
 			StageManager.Instance.Approval + ApprovalDeltaValue < 0){return;}
 		
-		StageManager.Instance.Money += MoneyDeltaValue;
-		StageManager.Instance.Approval += ApprovalDeltaValue;
+		StageManager.Instance.Money += (long)MoneyDeltaValue;
+		StageManager.Instance.Approval *= (100 + ApprovalDeltaValue) / 100f;
 		StageManager.Instance.Population += PopulationDeltaValue;
-		StageManager.Instance.Harvestable += HarvestableDeltaValue;
+		StageManager.Instance.Harvestable += (100 + HarvestableDeltaValue) / 100f;
 
 		if(StageManager.Instance.Approval >= 100)
 			StageManager.Instance.Approval = 100;
