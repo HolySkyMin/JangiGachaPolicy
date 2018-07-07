@@ -7,6 +7,7 @@ public class Status : MonoBehaviour
 {
 	public Text[] CardsAmountText;
 	public static int[] cards;
+	public static bool isSSSREarned;
 
 	private void Start()
 	{
@@ -17,5 +18,6 @@ public class Status : MonoBehaviour
 				CardsAmountText[i].text = cards[i].ToString();
 			}
 		}
+		isSSSREarned = false;
 	}
 }

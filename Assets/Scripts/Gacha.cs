@@ -78,5 +78,9 @@ public class Gacha : MonoBehaviour
 		{
 			Status.cards[i] += GachaResult[i];
 		}
+		if(GachaResult[(int)Rarity.SSSSR] > 0)
+		{
+			Status.isSSSREarned = true;
+		}
 	}
 }
