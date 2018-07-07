@@ -15,7 +15,7 @@ public class StageManager : MonoBehaviour
 	public List<int> StageNumber;
     public List<string> StageName;
 	public Text StageNumberText, StageNameText, MoneyText, ApprovalText, PopulationText, HarvestableText, PolicyGachaText;
-	public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyDimmer, NewStagePopup;
+	public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyDimmer, NewStagePopup, EndingPopup;
 	public RectTransform MenuPanel, GameOverPanel, PolicyListBody;
 	public GameObject[] MenuEffect = new GameObject[4];
 	public RectTransform[] GamePanel = new RectTransform[4];
@@ -198,9 +198,9 @@ public class StageManager : MonoBehaviour
 
 	public void UpdatePolicyGachaCount()
 	{
-		PolicyGachaText.text = ((20 + StageIndex * 5) - Gacha.gachaCount).ToString();
+		PolicyGachaText.text = ((20 + (StageIndex / 5 * 10)) - Gacha.gachaCount).ToString();
 
-		if(Gacha.gachaCount >= 20 + StageIndex * 5)
+		if(Gacha.gachaCount >= 20 + (StageIndex / 5 * 10))
 		{
 			PolicyDimmer.SetActive(false);
 			UpdatePolicy();
@@ -214,7 +214,10 @@ public class StageManager : MonoBehaviour
 		StageNameText.text = StageName[StageIndex].ToString();
 
 		ChangePanel(0);
-		NewStagePopup.SetActive(true);
+		if(StageIndex >= 30)
+			EndingPopup.SetActive(true);
+		else
+			NewStagePopup.SetActive(true);
 	}
 
 	public void ResetGameState() { State = GameState.General; }

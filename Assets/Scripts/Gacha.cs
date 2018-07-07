@@ -15,7 +15,7 @@ public class Gacha : MonoBehaviour
 
 	Rarity Dancha()
 	{
-		int randomNumber = Random.Range(1, 10000000);
+		int randomNumber = Random.Range(1, 10000001);
 		//Debug.Log(randomNumber);
 
 		if(randomNumber > 2500000)

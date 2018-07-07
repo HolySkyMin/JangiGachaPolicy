@@ -38,7 +38,7 @@ public class PolicyData : MonoBehaviour
 		StageManager.Instance.Money += (long)MoneyDeltaValue;
 		StageManager.Instance.Approval *= (100 + ApprovalDeltaValue) / 100f;
 		StageManager.Instance.Population += PopulationDeltaValue;
-		StageManager.Instance.Harvestable += (100 + HarvestableDeltaValue) / 100f;
+		StageManager.Instance.Harvestable *= (100 + HarvestableDeltaValue) / 100f;
 
 		if(StageManager.Instance.Approval >= 100)
 			StageManager.Instance.Approval = 100;
