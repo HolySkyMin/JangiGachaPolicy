@@ -18,7 +18,10 @@ public class StageManager : MonoBehaviour
 	public GameObject[] MenuEffect = new GameObject[4];
 	public RectTransform[] GamePanel = new RectTransform[4];
 
-	public delegate void SpecialEvent();
+	private List<GameObject> PolicyDisplayList = new List<GameObject>();
+	private List<PolicyDataCore> PositivePolicy = new List<PolicyDataCore>();
+	private List<PolicyDataCore> ModeratePolicy = new List<PolicyDataCore>();
+	private List<PolicyDataCore> NegativePolicy = new List<PolicyDataCore>();
 
 	void Start () 
 	{
@@ -39,7 +42,7 @@ public class StageManager : MonoBehaviour
 
 	private void ReadStageList()
 	{
-		TextAsset data = Resources.Load("stageList") as TextAsset;
+		TextAsset data = Resources.Load("stagelist") as TextAsset;
 		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
 		// Assume that there are only two keys.
 		for(int i = 1; i < arr.Length; i++)
@@ -48,6 +51,19 @@ public class StageManager : MonoBehaviour
 			int idx = int.Parse(row[0]);
 			StageNumber.Add(idx);
 			StageName.Add(row[1]);
+		}
+	}
+
+	private void ReadPolicyList()
+	{
+		TextAsset data = Resources.Load("policyList") as TextAsset;
+		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
+
+		for(int i = 1; i < arr.Length; i++)
+		{
+			string[] row = arr[i].Split(',');
+			PolicyData policy = new PolicyData();
+			
 		}
 	}
 
