@@ -68,7 +68,15 @@ public class Gacha : MonoBehaviour
 				+ GachaResult[4] + ", "
 				+ GachaResult[5]);
 
-		//Debug.Log(gameObject.GetComponentInParent<ShowGachaResult>());
-		gameObject.GetComponentInParent<ShowGachaResult>().UpdateResult(GachaResult);
+		gameObject.GetComponentInParent<ShowGachaResult>().UpdateResult(GachaResult);	//Show Result of Gacha
+		
+		if(Status.cards == null)
+		{
+			Status.cards = new int[6] {0, 0, 0, 0, 0, 0};
+		}
+		for (int i = 0; i < GachaResult.Length; i++)
+		{
+			Status.cards[i] += GachaResult[i];
+		}
 	}
 }
