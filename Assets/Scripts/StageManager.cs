@@ -8,8 +8,7 @@ public class StageManager : MonoBehaviour
 {
 	public static StageManager Instance;
 
-	public int StageIndex, Money, Population;
-	public float Approval, Harvestable;
+	public int StageIndex, Money, Population, Harvestable;
 	public List<int> StageNumber;
     public List<string> StageName;
 	public Text StageNumberText, StageNameText, MoneyText, PopulationText, HarvestableText;
@@ -28,7 +27,6 @@ public class StageManager : MonoBehaviour
 			Destroy(this);
 
 		//ReadStageList();
-		
 	}
 
 	void Update () 
@@ -49,17 +47,6 @@ public class StageManager : MonoBehaviour
 			int idx = int.Parse(row[0]);
 			StageNumber.Add(idx);
 			StageName.Add(row[1]);
-		}
-	}
-
-	private void ReadPolicyList()
-	{
-		TextAsset data = Resources.Load("policyList") as TextAsset;
-		string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
-
-		for(int i = 1; i < arr.Length; i++)
-		{
-			
 		}
 	}
 
@@ -90,10 +77,5 @@ public class StageManager : MonoBehaviour
 		StageIndex++;
 		// StageNumberText.text = StageNumber[StageIndex].ToString();
 		// StageNameText.text = StageName[StageIndex].ToString();
-	}
-
-	public void UpdatePolicyCard()
-	{
-
 	}
 }
