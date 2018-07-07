@@ -2325,7 +2325,7 @@ RectTransform:
   m_Children:
   - {fileID: 1036186699}
   m_Father: {fileID: 746486731}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.14070834}
   m_AnchorMax: {x: 1, y: 0.8797917}
@@ -3266,8 +3266,8 @@ MonoBehaviour:
   - {fileID: 1000435690}
   - {fileID: 607242662}
   - {fileID: 403663721}
-  ExtractAmount: {fileID: 0}
-  ExpectedEarnging: {fileID: 0}
+  ExtractAmount: {fileID: 189098829}
+  ExpectedEarnging: {fileID: 2132004050}
 --- !u!4 &700651319
 Transform:
   m_ObjectHideFlags: 0
@@ -3331,7 +3331,7 @@ MonoBehaviour:
   - {fileID: 210919342}
   - {fileID: 1130455498}
   GamePanel:
-  - {fileID: 0}
+  - {fileID: 2101388192}
   - {fileID: 2115452945}
   - {fileID: 670467316}
   - {fileID: 394070128}
@@ -3436,8 +3436,8 @@ RectTransform:
   - {fileID: 858579105}
   - {fileID: 2115452945}
   - {fileID: 670467316}
-  - {fileID: 2101388192}
   - {fileID: 394070128}
+  - {fileID: 2101388192}
   - {fileID: 137544254}
   m_Father: {fileID: 0}
   m_RootOrder: 1
@@ -7085,7 +7085,7 @@ RectTransform:
   m_Children:
   - {fileID: 1377206761}
   m_Father: {fileID: 746486731}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.14070834}
   m_AnchorMax: {x: 1, y: 0.8797917}
