@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Resources/Icons/class_group.png.meta
 guid: b47b7a6205a16154d8be79cf1c0b0a49
+=======
+guid: efc74a65a44fb4af0ac88d0506ea24ed
+>>>>>>> 0ede588c1b3d6fa292c3ecf047d7e9331c742c9f:Assets/Resources/Icons/class_group.png.meta
 TextureImporter:
   fileIDToRecycleName: {}
   externalObjects: {}
@@ -73,7 +77,11 @@ TextureImporter:
     outline: []
     physicsShape: []
     bones: []
+<<<<<<< HEAD:Assets/Resources/Icons/class_group.png.meta
     spriteID: e8d49cf1421cde947b057a19eb6620a3
+=======
+    spriteID: 7cbfc4ce41f9a4cc79c3a91cc77c58f6
+>>>>>>> 0ede588c1b3d6fa292c3ecf047d7e9331c742c9f:Assets/Resources/Icons/class_group.png.meta
     vertices: []
     indices: 
     edges: []
