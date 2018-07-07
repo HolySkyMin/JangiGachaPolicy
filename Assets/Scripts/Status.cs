@@ -8,6 +8,7 @@ public class Status : MonoBehaviour
 	public static Status Instance;
 	public Text[] CardsAmountText;
 	public Text ExtractAmount;
+	public Text ExpectedEarnging;
 	public static int[] cards;
 	public static bool isSSSREarned;
 
@@ -19,6 +20,12 @@ public class Status : MonoBehaviour
 			Instance = this;
 		else
 			Destroy(this);
+	}
+
+	private void Update()
+	{
+		ExtractAmount.text = extractAmount.ToString();
+		ExpectedEarnging.text = (extractAmount * 10000).ToString() + "$";
 	}
 
 	public void DisplayCardCount()
@@ -35,11 +42,16 @@ public class Status : MonoBehaviour
 
 	public void ChangeExtractAmount(int changeAmount)
 	{
-		if(extractAmount + changeAmount >= 0)
+		if(extractAmount + changeAmount >= 0 && extractAmount + changeAmount <= StageManager.Instance.Harvestable)
 		{
 			extractAmount += changeAmount;
 		}
+	}
 
-		ExtractAmount.text = extractAmount.ToString();
+	public void GetMoney()
+	{
+		StageManager.Instance.Money += extractAmount * 10000;
+		StageManager.Instance.Population -= extractAmount;
+		extractAmount = 0;
 	}
 }
