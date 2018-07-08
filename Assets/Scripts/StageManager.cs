@@ -15,7 +15,7 @@ public class StageManager : MonoBehaviour
 	public List<int> StageNumber;
     public List<string> StageName;
 	public Text StageNumberText, StageNameText, MoneyText, ApprovalText, PopulationText, HarvestableText, PolicyGachaText;
-	public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyDimmer, NewStagePopup, EndingPopup;
+	public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyAvailable, PolicyDimmer, NewStagePopup, EndingPopup;
 	public RectTransform MenuPanel, GameOverPanel, PolicyListBody;
 	public GameObject[] MenuEffect = new GameObject[4];
 	public RectTransform[] GamePanel = new RectTransform[4];
@@ -193,6 +193,7 @@ public class StageManager : MonoBehaviour
 	{
 		Approval *= 9f / 10f;
 		PolicyDimmer.SetActive(true);
+		PolicyAvailable.SetActive(false);
 		Gacha.gachaCount = 0;
 		UpdatePolicyGachaCount();
 	}
@@ -204,6 +205,7 @@ public class StageManager : MonoBehaviour
 		if(Gacha.gachaCount == 20 + (StageIndex / 5 * 15))
 		{
 			PolicyDimmer.SetActive(false);
+			PolicyAvailable.SetActive(true);
 			UpdatePolicy();
 		}
 	}

@@ -47,6 +47,7 @@ public class PolicyData : MonoBehaviour
 			StageManager.Instance.Harvestable = 0;
 
 		StageManager.Instance.PolicyDimmer.SetActive(true);
+		StageManager.Instance.PolicyAvailable.SetActive(false);
 		Gacha.gachaCount = 0;
 		StageManager.Instance.UpdatePolicyGachaCount();
 	}
