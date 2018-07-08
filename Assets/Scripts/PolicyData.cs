@@ -32,8 +32,7 @@ public class PolicyData : MonoBehaviour
 	public void ApplyPolicy()
 	{
 		if(StageManager.Instance.Money + MoneyDeltaValue < 0L || 
-			StageManager.Instance.Population + PopulationDeltaValue < 0 ||
-			StageManager.Instance.Approval + ApprovalDeltaValue < 0){return;}
+			StageManager.Instance.Population + PopulationDeltaValue < 0) {return;}
 		
 		StageManager.Instance.Money += (long)MoneyDeltaValue;
 		StageManager.Instance.Approval *= (100 + ApprovalDeltaValue) / 100f;
