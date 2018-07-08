@@ -25,7 +25,7 @@ public class Status : MonoBehaviour
 	private void Update()
 	{
 		ExtractAmount.text = extractAmount.ToString();
-		ExpectedEarnging.text = (extractAmount * 10000).ToString() + "$";
+		ExpectedEarnging.text = (extractAmount * 5000).ToString() + "$";
 	}
 
 	public void DisplayCardCount()
@@ -51,7 +51,7 @@ public class Status : MonoBehaviour
 	public void GetMoney()
 	{
 		float absolutePeople = StageManager.Instance.Population * (StageManager.Instance.Harvestable / 100);
-		StageManager.Instance.Money += extractAmount * 10000;
+		StageManager.Instance.Money += extractAmount * 5000;
 		StageManager.Instance.Population -= extractAmount;
 		StageManager.Instance.Approval -= extractAmount / 1000f;
 		absolutePeople -= extractAmount;

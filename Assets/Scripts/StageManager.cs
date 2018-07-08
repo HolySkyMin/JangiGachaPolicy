@@ -120,6 +120,7 @@ public class StageManager : MonoBehaviour
 		GamePanel[index].SetAsLastSibling();
 		MenuPanel.SetAsLastSibling();
 		GameOverPanel.SetAsLastSibling();
+		EndingPopup.GetComponent<RectTransform>().SetAsLastSibling();
 		for(int i = 0; i < MenuEffect.Length; i++)
 		{
 			if(i == index)
@@ -211,7 +212,8 @@ public class StageManager : MonoBehaviour
 	{
 		StageIndex++;
 		// StageNumberText.text = StageNumber[StageIndex].ToString();
-		StageNameText.text = StageName[StageIndex].ToString();
+		if(StageIndex < 30) 
+			StageNameText.text = StageName[StageIndex].ToString();
 
 		ChangePanel(0);
 		if(StageIndex >= 30)
