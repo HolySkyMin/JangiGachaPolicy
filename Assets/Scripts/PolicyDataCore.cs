@@ -9,5 +9,6 @@ public struct PolicyDataCore
 	public int MoneyDeltaValue;
 	public float ApprovalDeltaValue;
 	public int PopulationDeltaValue;
-	public float HarvestableDeltaValue;
+	public int GutPriceDeltaValue;
+    public bool IsPercentPoint;
 }
