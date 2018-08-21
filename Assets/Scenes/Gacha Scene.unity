@@ -145,7 +145,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -400, y: -30}
+  m_AnchoredPosition: {x: 66, y: -30}
   m_SizeDelta: {x: 380, y: 60}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!222 &1385439
@@ -2020,7 +2020,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &270948477
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3901,7 +3901,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: bd46d52703fb97249a4bbccdd9b54e82, type: 3}
+  m_Sprite: {fileID: 21300000, guid: edd8a2eeaaf424dca858dba461b15744, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -4162,6 +4162,7 @@ MonoBehaviour:
   - {fileID: 403663721}
   ExtractAmount: {fileID: 189098829}
   ExpectedEarnging: {fileID: 2132004050}
+  gutPrice: 0
 --- !u!4 &700651319
 Transform:
   m_ObjectHideFlags: 0
@@ -7093,13 +7094,14 @@ MonoBehaviour:
   MoneyDeltaValue: 0
   ApprovalDeltaValue: 0
   PopulationDeltaValue: 0
-  HarvestableDeltaValue: 0
+  GutPriceDeltaValue: 0
+  IsPercentPoint: 0
   NameText: {fileID: 1221572982}
   DescriptionText: {fileID: 264183524}
   MoneyText: {fileID: 1952810932}
   ApprovalText: {fileID: 1235839366}
   PopulationText: {fileID: 129503730}
-  HarvestableText: {fileID: 1754429052}
+  GutPriceText: {fileID: 1754429052}
 --- !u!1 &1423553548
 GameObject:
   m_ObjectHideFlags: 0
@@ -8318,7 +8320,7 @@ GameObject:
   - component: {fileID: 1754429053}
   - component: {fileID: 1754429052}
   m_Layer: 5
-  m_Name: PolicyHarv
+  m_Name: PolicyGutP
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
