@@ -4464,6 +4464,7 @@ MonoBehaviour:
   NewStagePopup: {fileID: 1358196693}
   EndingPopup: {fileID: 228233112}
   MenuDimmer: {fileID: 1667891374}
+  NoMoneyAlert: {fileID: 334048279}
   MenuPanel: {fileID: 137544254}
   GameOverPanel: {fileID: 986556991}
   PolicyListBody: {fileID: 493301365}

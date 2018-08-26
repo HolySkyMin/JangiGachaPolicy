@@ -12,7 +12,9 @@ public class StageManager : MonoBehaviour
         MoneyText, ApprovalText, PopulationText, GutPriceText, 
         PolicyGachaText;
     public Text[] CardsText;
-    public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyAvailable, PolicyDimmer, NewStagePopup, EndingPopup, MenuDimmer;
+    public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, 
+        PolicyTemplate, PolicyAvailable, PolicyDimmer,
+        NewStagePopup, EndingPopup, MenuDimmer, NoMoneyAlert;
     public RectTransform MenuPanel, GameOverPanel, PolicyListBody;
     public GachaAnimation GachaAnim;
     public GameObject[] MenuEffect = new GameObject[4];
@@ -92,14 +94,19 @@ public class StageManager : MonoBehaviour
     #region 가챠 관련 메소드
     public void DoGacha(int count)
     {
-        GameManager.Instance.Phase = StageState.Gacha;
-        ToggleMenuDimmer(true);
-        int[] gachaData = GameManager.Instance.ExecuteGacha(count);
-        GachaAnim.Play((int)Mathf.Log10(count) + 1, gachaData);
+        if (GameManager.Instance.Money < count * 3)
+            NoMoneyAlert.SetActive(true);
+        else
+        {
+            GameManager.Instance.Phase = StageState.Gacha;
+            ToggleMenuDimmer(true);
+            int[] gachaData = GameManager.Instance.ExecuteGacha(count);
+            GachaAnim.Play((int)Mathf.Log10(count) + 1, gachaData);
 
-        DisplayCardCount();
-        GameManager.Instance.PolicyCount++;
-        UpdatePolicyGachaCount();
+            DisplayCardCount();
+            GameManager.Instance.PolicyCount++;
+            UpdatePolicyGachaCount();
+        }
     }
 
     private void DisplayCardCount()
