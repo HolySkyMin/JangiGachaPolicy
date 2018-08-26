@@ -18,7 +18,7 @@ public class PolicyData : MonoBehaviour
     {
         if (MoneyDeltaValue >= 0L)
             MoneyText.text = "+";
-        MoneyText.text += MoneyDeltaValue.ToString();
+        MoneyText.text += MoneyDeltaValue.ToString("N0");
         if (ApprovalDeltaValue >= 0)
             ApprovalText.text = "+";
         ApprovalText.text += ApprovalDeltaValue.ToString("N0") + "%";
@@ -29,28 +29,28 @@ public class PolicyData : MonoBehaviour
         PopulationText.text += PopulationDeltaValue.ToString();
         if (GutPriceDeltaValue >= 0)
             GutPriceText.text = "+";
-        GutPriceText.text += GutPriceDeltaValue.ToString() + "$";
+        GutPriceText.text += GutPriceDeltaValue.ToString("N0") + "$";
     }
 
     public void ApplyPolicy()
     {
-        if (StageManager.Instance.Money + MoneyDeltaValue < 0L ||
-            StageManager.Instance.Population + PopulationDeltaValue < 0) { return; }
+        if (GameManager.Instance.Money + MoneyDeltaValue < 0L ||
+            GameManager.Instance.Population + PopulationDeltaValue < 0) { return; }
 
-        StageManager.Instance.Money += (long)MoneyDeltaValue;
+        GameManager.Instance.Money += (long)MoneyDeltaValue;
         if (IsPercentPoint)
-            StageManager.Instance.Approval += ApprovalDeltaValue;
+            GameManager.Instance.Approval += ApprovalDeltaValue;
         else
-            StageManager.Instance.Approval *= (100 + ApprovalDeltaValue) / 100f;
-        StageManager.Instance.Population += PopulationDeltaValue;
-        Status.Instance.gutPrice += GutPriceDeltaValue;
+            GameManager.Instance.Approval *= (100 + ApprovalDeltaValue) / 100f;
+        GameManager.Instance.Population += PopulationDeltaValue;
+        GameManager.Instance.GutPrice += GutPriceDeltaValue;
 
-        if (StageManager.Instance.Approval >= 100)
-            StageManager.Instance.Approval = 100;
+        if (GameManager.Instance.Approval >= 100)
+            GameManager.Instance.Approval = 100;
 
+        GameManager.Instance.ResetPolicyCount();
         StageManager.Instance.PolicyDimmer.SetActive(true);
         StageManager.Instance.PolicyAvailable.SetActive(false);
-        Gacha.gachaCount = 0;
         StageManager.Instance.UpdatePolicyGachaCount();
     }
 }

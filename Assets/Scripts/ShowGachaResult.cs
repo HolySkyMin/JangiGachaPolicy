@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class ShowGachaResult : MonoBehaviour
 {
-    public GameObject ResultPanel, MenuDimmer;
+    public GameObject ResultPanel;
     public Text[] Amount;
 
     private void Start()
@@ -19,13 +19,7 @@ public class ShowGachaResult : MonoBehaviour
 
         for (int i = 0; i < resultArray.Length; i++)
         {
-            Amount[i].text = resultArray[i].ToString();
+            Amount[i].text = resultArray[i].ToString("N0");
         }
-    }
-
-    public void AcceptClick()
-    {
-        ResultPanel.SetActive(false);
-        MenuDimmer.SetActive(false);
     }
 }

@@ -1,29 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class StageManager : MonoBehaviour
 {
     public static StageManager Instance;
-    public static GameState State = GameState.General;
 
-    public int StageIndex = 0, Population;
-    public long Money;
-    public float Approval, Harvestable;
-    public List<int> StageNumber;
-    public List<string> StageName;
-    public Text StageNumberText, StageNameText, MoneyText, ApprovalText, PopulationText, HarvestableText, PolicyGachaText;
-    public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyAvailable, PolicyDimmer, NewStagePopup, EndingPopup;
+    public Text 
+        StageNumberText, StageNameText, ExtractCountText, ExpectedMoneyText,
+        MoneyText, ApprovalText, PopulationText, GutPriceText, 
+        PolicyGachaText;
+    public Text[] CardsText;
+    public GameObject ResultPanel, EarnedPanel, EarnedPanelBtn, PolicyTemplate, PolicyAvailable, PolicyDimmer, NewStagePopup, EndingPopup, MenuDimmer;
     public RectTransform MenuPanel, GameOverPanel, PolicyListBody;
+    public GachaAnimation GachaAnim;
     public GameObject[] MenuEffect = new GameObject[4];
     public RectTransform[] GamePanel = new RectTransform[4];
 
+    private int extractCount = 0;
     private List<GameObject> PolicyDisplayList = new List<GameObject>();
-    private List<PolicyDataCore> PositivePolicy = new List<PolicyDataCore>();
-    private List<PolicyDataCore> ModeratePolicy = new List<PolicyDataCore>();
-    private List<PolicyDataCore> NegativePolicy = new List<PolicyDataCore>();
 
     void Start()
     {
@@ -32,96 +28,28 @@ public class StageManager : MonoBehaviour
         else
             Destroy(this);
 
-        ReadStageList();
-        ReadPolicyList();
+        GameManager.Instance.State = GameState.Stage;
+        GameManager.Instance.Phase = StageState.General;
+        GameManager.Instance.ReadStageList();
+        GameManager.Instance.ReadPolicyList();
 
-        Initialize();
+        UpdateStage();
+        UpdatePolicyGachaCount();
+        DisplayCardCount();
     }
 
     void Update()
     {
-        MoneyText.text = Money.ToString();
-        ApprovalText.text = Approval.ToString("N2");
-        PopulationText.text = Population.ToString();
-        //HarvestableText.text = Harvestable.ToString("N2");
+        MoneyText.text = GameManager.Instance.Money.ToString("N0");
+        ApprovalText.text = GameManager.Instance.Approval.ToString("N2");
+        PopulationText.text = GameManager.Instance.Population.ToString("N0");
+        GutPriceText.text = GameManager.Instance.GutPrice.ToString("N0") + "$";
 
-        if (State == GameState.General && Approval <= 4f)
-            GameOver();
-        if (State == GameState.General && Money < 3 && Population < 10f && Gacha.gachaCount < 20 + (StageIndex / 5 * 15))
+        if (GameManager.Instance.Phase == StageState.General && GameManager.Instance.CheckGameOver() == true)
             GameOver();
     }
 
-    public void Initialize()
-    {
-        Money = 3000000L;
-        Approval = 55;
-        Population = 50000;
-        Harvestable = 25;
-        StageIndex = -1;
-        Gacha.gachaCount = 20;
-        Status.cards = new long[6] { 0L, 0L, 0L, 0L, 0L, 0L };
-        Status.Instance.DisplayCardCount();
-        Status.Instance.gutPrice = 10000;
-
-        UpdateStage();
-        ResetGameState();
-        UpdatePolicyGachaCount();
-    }
-
-    private void ReadStageList()
-    {
-        TextAsset data = Resources.Load("Data/stagelist") as TextAsset;
-        string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
-
-        for (int i = 1; i < arr.Length; i++)
-        {
-            string[] row = arr[i].Split(',');
-            if (row.Length == 2)
-            {
-                int idx = int.Parse(row[0]);
-                StageNumber.Add(idx);
-                StageName.Add(row[1]);
-            }
-        }
-
-        StageNameText.text = StageName[StageIndex].ToString();
-    }
-
-    private void ReadPolicyList()
-    {
-        TextAsset data = Resources.Load("Data/policyList") as TextAsset;
-        string[] arr = Regex.Split(data.text, @"\r\n|\n\r|\n|\r");
-
-        for (int i = 1; i < arr.Length; i++)
-        {
-            string[] row = arr[i].Split(',');
-            if (row.Length == 8)
-            {
-                PolicyDataCore policy;
-                policy.Name = row[0];
-                policy.Description = row[1];
-                policy.MoneyDeltaValue = int.Parse(row[2]);
-                policy.ApprovalDeltaValue = float.Parse(row[3]);
-                policy.PopulationDeltaValue = int.Parse(row[4]);
-                policy.GutPriceDeltaValue = int.Parse(row[5]);
-
-                int isPP = int.Parse(row[7]);
-                if (isPP == 0)
-                    policy.IsPercentPoint = false;
-                else
-                    policy.IsPercentPoint = true;
-
-                int positivity = int.Parse(row[6]);
-                if (positivity == 1)
-                    NegativePolicy.Add(policy);
-                else if (positivity == 2)
-                    ModeratePolicy.Add(policy);
-                else if (positivity == 3)
-                    PositivePolicy.Add(policy);
-            }
-        }
-    }
-
+    #region 기본 UI 관련 메소드
     public void ChangePanel(int index)
     {
         GamePanel[index].SetAsLastSibling();
@@ -137,16 +65,62 @@ public class StageManager : MonoBehaviour
         }
     }
 
+    public void ToggleMenuDimmer(bool flag)
+    {
+        MenuDimmer.SetActive(flag);
+    }
+    #endregion
+
+    #region 적출 관련 메소드
+    public void ChangeExtractCount(int delta)
+    {
+        if (extractCount + delta >= 0 && extractCount + delta <= GameManager.Instance.Population)
+            extractCount += delta;
+        ExtractCountText.text = extractCount.ToString();
+        ExpectedMoneyText.text = GameManager.Instance.CalculateMoney(extractCount).ToString("N0") + "$";
+    }
+
+    public void Extract()
+    {
+        GameManager.Instance.MakeMoney(extractCount);
+        extractCount = 0;
+        ExtractCountText.text = extractCount.ToString();
+        ExpectedMoneyText.text = GameManager.Instance.CalculateMoney(extractCount).ToString();
+    }
+    #endregion
+
+    #region 가챠 관련 메소드
+    public void DoGacha(int count)
+    {
+        GameManager.Instance.Phase = StageState.Gacha;
+        ToggleMenuDimmer(true);
+        int[] gachaData = GameManager.Instance.ExecuteGacha(count);
+        GachaAnim.Play((int)Mathf.Log10(count) + 1, gachaData);
+
+        DisplayCardCount();
+        GameManager.Instance.PolicyCount++;
+        UpdatePolicyGachaCount();
+    }
+
+    private void DisplayCardCount()
+    {
+        for (int i = 0; i < 6; i++)
+            CardsText[i].text = GameManager.Instance.Cards[i].ToString("N0");
+    }
+
     public void CheckSSSSREarned()
     {
-        if (Status.isSSSREarned)
+        if (GameManager.Instance.GotSSSR)
         {
             EarnedPanel.SetActive(true);
-            Status.isSSSREarned = false;
+            GameManager.Instance.GotSSSR = false;
             StartCoroutine(SSSSRButtonAnim());
         }
         else
-            State = GameState.General;
+        {
+            GameManager.Instance.Phase = StageState.General;
+            ToggleMenuDimmer(false);
+        }
     }
 
     IEnumerator SSSSRButtonAnim()
@@ -154,41 +128,27 @@ public class StageManager : MonoBehaviour
         yield return new WaitForSeconds(2);
         EarnedPanelBtn.SetActive(true);
     }
+    #endregion
 
+    #region 정책 관련 메소드
     public void UpdatePolicy()
     {
         for (int i = 0; i < PolicyDisplayList.Count; i++)
             Destroy(PolicyDisplayList[i]);
         PolicyDisplayList.Clear();
 
-        PolicyDataCore[] policy = new PolicyDataCore[0];
-        int rand = Random.Range(1, 4); // 1, 2, 3 can be picked.
-        if (rand == 1)
-            policy = NegativePolicy.ToArray();
-        else if (rand == 2)
-            policy = ModeratePolicy.ToArray();
-        else if (rand == 3)
-            policy = PositivePolicy.ToArray();
-
-        bool[] checksum = new bool[policy.Length];
-        for (int i = 0; i < 3; i++)
+        List<PolicyDataCore> policyList = GameManager.Instance.MakePolicyList();
+        for (int i = 0; i < policyList.Count; i++)
         {
-            int index;
-            do
-            {
-                index = Random.Range(0, policy.Length); // 0, 1, ..., policy.Length - 1 can be picked.
-            }
-            while (checksum[index] == true);
-            checksum[index] = true;
             GameObject newObj = Instantiate(PolicyTemplate);
             PolicyData newPolicy = newObj.GetComponent<PolicyData>();
-            newPolicy.NameText.text = policy[index].Name;
-            newPolicy.DescriptionText.text = policy[index].Description;
-            newPolicy.MoneyDeltaValue = policy[index].MoneyDeltaValue;
-            newPolicy.ApprovalDeltaValue = policy[index].ApprovalDeltaValue;
-            newPolicy.PopulationDeltaValue = policy[index].PopulationDeltaValue;
-            newPolicy.GutPriceDeltaValue = policy[index].GutPriceDeltaValue;
-            newPolicy.IsPercentPoint = policy[index].IsPercentPoint;
+            newPolicy.NameText.text = policyList[i].Name;
+            newPolicy.DescriptionText.text = policyList[i].Description;
+            newPolicy.MoneyDeltaValue = policyList[i].MoneyDeltaValue;
+            newPolicy.ApprovalDeltaValue = policyList[i].ApprovalDeltaValue;
+            newPolicy.PopulationDeltaValue = policyList[i].PopulationDeltaValue;
+            newPolicy.GutPriceDeltaValue = policyList[i].GutPriceDeltaValue;
+            newPolicy.IsPercentPoint = policyList[i].IsPercentPoint;
             newObj.GetComponent<RectTransform>().SetParent(PolicyListBody);
             newObj.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
             newObj.SetActive(true);
@@ -199,44 +159,58 @@ public class StageManager : MonoBehaviour
 
     public void SkipPolicy()
     {
-        Approval *= 9f / 10f;
+        GameManager.Instance.SkipPolicy();
+
         PolicyDimmer.SetActive(true);
         PolicyAvailable.SetActive(false);
-        Gacha.gachaCount = 0;
         UpdatePolicyGachaCount();
     }
 
     public void UpdatePolicyGachaCount()
     {
-        PolicyGachaText.text = ((20 + (StageIndex / 5 * 15)) - Gacha.gachaCount).ToString();
+        PolicyGachaText.text = (GameManager.Instance.PolicyThreshold - GameManager.Instance.PolicyCount).ToString();
 
-        if (Gacha.gachaCount == 20 + (StageIndex / 5 * 15))
+        if (GameManager.Instance.PolicyCount >= GameManager.Instance.PolicyThreshold)
         {
             PolicyDimmer.SetActive(false);
             PolicyAvailable.SetActive(true);
             UpdatePolicy();
         }
+        else
+        {
+            PolicyDimmer.SetActive(true);
+            PolicyAvailable.SetActive(false);
+        }
+    }
+    #endregion
+
+    public void Save()
+    {
+        GameManager.Instance.SaveCurrentGame();
     }
 
     public void UpdateStage()
     {
-        StageIndex++;
-        // StageNumberText.text = StageNumber[StageIndex].ToString();
-        if (StageIndex < 30)
-            StageNameText.text = StageName[StageIndex].ToString();
+        StageNameText.text = GameManager.Instance.UpdateAndGetStage();
 
         ChangePanel(0);
-        if (StageIndex >= 30)
+        if (GameManager.Instance.StageLevel >= 30)
             EndingPopup.SetActive(true);
         else
             NewStagePopup.SetActive(true);
+        ToggleMenuDimmer(true);
     }
 
-    public void ResetGameState() { State = GameState.General; }
+    public void ResetGameState() { GameManager.Instance.Phase = StageState.General; }
 
     public void GameOver()
     {
-        State = GameState.GameOver;
+        GameManager.Instance.Phase = StageState.GameOver;
         GameOverPanel.gameObject.SetActive(true);
+    }
+
+    public void QuitStage()
+    {
+        SceneChanger.LoadScene("Title Screen");
     }
 }

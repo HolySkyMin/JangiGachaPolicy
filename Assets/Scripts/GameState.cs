@@ -4,7 +4,14 @@ using UnityEngine;
 
 public enum GameState
 {
-	General,
-	Gacha,
-	GameOver,
+    Title,
+    Intro,
+    Stage
+}
+
+public enum StageState
+{
+    General,
+    Gacha,
+    GameOver,
 }
