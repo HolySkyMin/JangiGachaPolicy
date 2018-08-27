@@ -10,6 +10,7 @@ public class IntroManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.State = GameState.Intro;
+        SoundManager.PlayBGM("bgm_intro");
         StartCoroutine(StartAnim());
     }
 

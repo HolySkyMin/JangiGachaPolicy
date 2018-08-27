@@ -59,6 +59,10 @@ public class GachaAnimation : MonoBehaviour
                 GachaParticle.transform.eulerAngles = new Vector3(0, 0, 30 * clickCount);
                 GachaCardPack.transform.localScale = new Vector3(1.1f, 1.1f, 1);
                 clickCount++;
+                if (clickCount < clickGoal)
+                    SoundManager.PlaySoundEffect("effect_gachatouch1");
+                else
+                    SoundManager.PlaySoundEffect("effect_gachatouch2");
             }
 
             if (clickCount == clickGoal)

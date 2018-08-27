@@ -8,6 +8,7 @@ public class TitleManager : MonoBehaviour
     private void Start()
     {
         GameManager.Instance.State = GameState.Title;
+        SoundManager.PlayBGM("bgm_title");
         VersionText.text = Application.version;
     }
 
