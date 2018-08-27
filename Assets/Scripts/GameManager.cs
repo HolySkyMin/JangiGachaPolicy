@@ -52,18 +52,20 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region 게임 데이터 저장 및 불러오기
+    #region 게임 데이터 저장, 삭제 및 불러오기
     public void CreateNewGame(int slot)
     {
         CurrentGameData = new SaveData(true);
         CurrentSaveSlot = slot;
         CurrentGameData.LoadToGame();
 
-        SceneChanger.LoadScene("Gacha Scene");
+        SceneChanger.LoadScene("Intro Scene");
     }
 
     public void LoadSavedGame(int slot)
     {
+        if (!File.Exists(Application.persistentDataPath + "/save" + slot.ToString()))
+            return;
         FileStream stream = File.Open(Application.persistentDataPath + "/save" + slot.ToString(), FileMode.Open);
         BinaryFormatter formatter = new BinaryFormatter();
         CurrentGameData = (SaveData)formatter.Deserialize(stream);
@@ -81,6 +83,13 @@ public class GameManager : MonoBehaviour
         BinaryFormatter formatter = new BinaryFormatter();
         formatter.Serialize(stream, CurrentGameData);
         stream.Close();
+    }
+
+    public void DeleteSavedGame(int slot)
+    {
+        if (!File.Exists(Application.persistentDataPath + "/save" + slot.ToString()))
+            return;
+        File.Delete(Application.persistentDataPath + "/save" + slot.ToString());
     }
     #endregion
 
