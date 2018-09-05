@@ -26,7 +26,7 @@ public class GachaAnimation : MonoBehaviour
         if (gachaResult[5] > 0)
             lastEffectColor = new Color32(255, 128, 0, 255);
         else if (gachaResult[4] > 0)
-            lastEffectColor = Color.blue;
+            lastEffectColor = Color.cyan;
         else if (gachaResult[3] > 0)
             lastEffectColor = Color.magenta;
         else if (gachaResult[2] > 0)

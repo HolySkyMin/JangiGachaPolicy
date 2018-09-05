@@ -100,7 +100,7 @@ public class StageManager : MonoBehaviour
         else
         {
             GameManager.Instance.Phase = StageState.Gacha;
-            SoundManager.PlayBGM("bgm_gachaexecute");
+            //SoundManager.PlayBGM("bgm_gachaexecute");
             ToggleMenuDimmer(true);
             int[] gachaData = GameManager.Instance.ExecuteGacha(count);
             GachaAnim.Play((int)Mathf.Log10(count) + 1, gachaData);
@@ -213,7 +213,7 @@ public class StageManager : MonoBehaviour
     public void ResetGameState()
     {
         GameManager.Instance.Phase = StageState.General;
-        SoundManager.PlayBGM("bgm_stage");
+        //SoundManager.PlayBGM("bgm_stage");
     }
 
     public void GameOver()
