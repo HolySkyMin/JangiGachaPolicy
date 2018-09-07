@@ -77,8 +77,11 @@ public class StageManager : MonoBehaviour
     #region 적출 관련 메소드
     public void ChangeExtractCount(int delta)
     {
-        if (extractCount + delta >= 0 && extractCount + delta <= GameManager.Instance.Population)
-            extractCount += delta;
+        extractCount += delta;
+        if (extractCount < 0)
+            extractCount = 0;
+        if (extractCount > GameManager.Instance.Population)
+            extractCount = GameManager.Instance.Population;
         ExtractCountText.text = extractCount.ToString();
         ExpectedMoneyText.text = GameManager.Instance.CalculateMoney(extractCount).ToString("N0") + "$";
     }

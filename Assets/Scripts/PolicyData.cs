@@ -14,6 +14,18 @@ public class PolicyData : MonoBehaviour
     public Text DescriptionText;
     public Text MoneyText, ApprovalText, PopulationText, GutPriceText;
 
+    private void Update()
+    {
+        if ((GameManager.Instance.Money + MoneyDeltaValue < 0 ||
+            GameManager.Instance.Population + PopulationDeltaValue < 0) && 
+            gameObject.GetComponent<Button>().interactable)
+            gameObject.GetComponent<Button>().interactable = false;
+        if (GameManager.Instance.Money + MoneyDeltaValue >= 0 && 
+            GameManager.Instance.Population + PopulationDeltaValue >= 0 && 
+            !gameObject.GetComponent<Button>().interactable)
+            gameObject.GetComponent<Button>().interactable = true;
+    }
+
     public void DisplayValueInfo()
     {
         if (MoneyDeltaValue >= 0L)
@@ -47,6 +59,8 @@ public class PolicyData : MonoBehaviour
 
         if (GameManager.Instance.Approval >= 100)
             GameManager.Instance.Approval = 100;
+        if (GameManager.Instance.Approval < 0)
+            GameManager.Instance.Approval = 0;
 
         GameManager.Instance.ResetPolicyCount();
         StageManager.Instance.PolicyDimmer.SetActive(true);

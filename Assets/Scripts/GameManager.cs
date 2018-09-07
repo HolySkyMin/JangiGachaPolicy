@@ -165,6 +165,8 @@ public class GameManager : MonoBehaviour
         Money += CalculateMoney(dieCount);
         Population -= dieCount;
         Approval -= dieCount / 500f;
+        if (Approval < 0)
+            Approval = 0;
     }
     #endregion
 
