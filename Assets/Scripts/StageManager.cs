@@ -96,7 +96,10 @@ public class StageManager : MonoBehaviour
     public void DoGacha(int count)
     {
         if (GameManager.Instance.Money < count * 3)
+        {
             NoMoneyAlert.SetActive(true);
+            SoundManager.PlaySoundEffect("effect_notenoughcash");
+        }
         else
         {
             GameManager.Instance.Phase = StageState.Gacha;
