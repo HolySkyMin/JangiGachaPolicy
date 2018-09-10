@@ -185,13 +185,13 @@ public class StageManager : MonoBehaviour
     {
         PolicyGachaText.text = (GameManager.Instance.PolicyThreshold - GameManager.Instance.PolicyCount).ToString();
 
-        if (GameManager.Instance.PolicyCount >= GameManager.Instance.PolicyThreshold)
+        if (GameManager.Instance.PolicyCount == GameManager.Instance.PolicyThreshold)
         {
             PolicyDimmer.SetActive(false);
             PolicyAvailable.SetActive(true);
             UpdatePolicy();
         }
-        else
+        else if(GameManager.Instance.PolicyCount < GameManager.Instance.PolicyThreshold)
         {
             PolicyDimmer.SetActive(true);
             PolicyAvailable.SetActive(false);

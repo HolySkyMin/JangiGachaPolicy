@@ -7,7 +7,7 @@ public class ScreenScaler : MonoBehaviour
 {
 	public CanvasScaler scaler;
 
-	private void Start()
+	private void Update()
 	{
 		SetScale(Screen.width, Screen.height);
 	}

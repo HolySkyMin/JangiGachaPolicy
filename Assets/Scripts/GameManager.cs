@@ -41,6 +41,10 @@ public class GameManager : MonoBehaviour
         }
         else
             Destroy(gameObject);
+
+#if UNITY_STANDALONE
+        Screen.SetResolution(608, 1080, true);
+#endif
     }
 
     private void Update()
@@ -52,7 +56,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    #region 게임 데이터 저장, 삭제 및 불러오기
+#region 게임 데이터 저장, 삭제 및 불러오기
     public void CreateNewGame(int slot)
     {
         CurrentGameData = new SaveData(true);
@@ -91,9 +95,9 @@ public class GameManager : MonoBehaviour
             return;
         File.Delete(Application.persistentDataPath + "/save" + slot.ToString());
     }
-    #endregion
+#endregion
 
-    #region 스테이지 및 정책 불러오기
+#region 스테이지 및 정책 불러오기
     public void ReadStageList()
     {
         TextAsset data = Resources.Load("Data/stagelist") as TextAsset;
@@ -143,7 +147,7 @@ public class GameManager : MonoBehaviour
             }
         }
     }
-    #endregion
+#endregion
 
     public string UpdateAndGetStage()
     {
@@ -154,7 +158,7 @@ public class GameManager : MonoBehaviour
             return "통상 가챠 시즌이 시작되었습니다!";
     }
 
-    #region 적출 관련 메소드
+#region 적출 관련 메소드
     public int CalculateMoney(int dieCount)
     {
         return dieCount * GutPrice;
@@ -168,9 +172,9 @@ public class GameManager : MonoBehaviour
         if (Approval < 0)
             Approval = 0;
     }
-    #endregion
+#endregion
 
-    #region 가챠 관련 메소드
+#region 가챠 관련 메소드
     public int[] ExecuteGacha(int count)
     {
         Money -= count * 3;
@@ -197,9 +201,9 @@ public class GameManager : MonoBehaviour
             GotSSSR = true;
         return card;
     }
-    #endregion
+#endregion
 
-    #region 정책 관련 메소드
+#region 정책 관련 메소드
     public List<PolicyDataCore> MakePolicyList()
     {
         PolicyDataCore[] policy = new PolicyDataCore[0];
@@ -236,7 +240,7 @@ public class GameManager : MonoBehaviour
         PolicyCount = 0;
         PolicyThreshold = 20 + (StageLevel / 5 * 15);
     }
-    #endregion
+#endregion
 
     public bool CheckGameOver()
     {
